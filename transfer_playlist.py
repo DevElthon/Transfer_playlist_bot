@@ -1,0 +1,95 @@
+import pyautogui 
+import time
+from selenium import webdriver
+
+num = input("Insira seu numero de telefone para acesso ao deezer: ")
+email = input("Insira o email de login do spotfy: ")
+password = input("Insira a senha de login do spotfy: ")
+num_songs = int(input("Insira o numero de musicas que gostaria de transferir: "))
+
+pyautogui.PAUSE = 1
+
+driver = webdriver.Chrome()
+driver.maximize_window()
+time.sleep(4)
+
+#deezer login
+#Em alguns casos é necessário colocar código recebido no celular (autentificação de duas etapas para isso, deixei um temporizador de 30 segundos)
+driver.get("https://www.deezer.com/br/")
+window_before = driver.window_handles[0]
+time.sleep(4)
+driver.find_element('xpath','//*[@id="gdpr-btn-accept-all"]').click()
+time.sleep(2)
+driver.find_element('xpath','/html/body/div[1]/div/a').click()
+time.sleep(4)
+pyautogui.write(num)
+driver.find_element('xpath','//*[@id="login_form_submit"]').click()
+print("Coloque o codigo de validacao nos proximos 30 segundos.")
+time.sleep(30)
+driver.find_element('xpath','//*[@id="page_sidebar"]/div[2]/div[3]/div/ul/li[6]/a').click()
+time.sleep(2)
+pyautogui.click(x=943, y=806)
+time.sleep(2)
+pyautogui.click(x=400, y=867)
+time.sleep(3)
+
+#Spotfy login
+pyautogui.hotkey("ctrl", "t")
+window_after = driver.window_handles[1]
+driver.switch_to.window(window_after)
+driver.get("https://open.spotify.com")
+pyautogui.press("enter")
+time.sleep(2)
+driver.find_element('xpath','//*[@id="main"]/div/div[2]/div[1]/header/div[5]/button[2]/span').click()
+time.sleep(3)
+driver.find_element('xpath','//*[@id="login-username"]').click()
+time.sleep(2)
+pyautogui.write(email)
+driver.find_element('xpath','//*[@id="login-password"]').click()
+time.sleep(2)
+pyautogui.write(password)
+pyautogui.press("enter")
+time.sleep(3)
+driver.switch_to.window(window_before)
+time.sleep(2)
+pyautogui.click(x=267, y=970)
+time.sleep(1)
+pyautogui.moveTo(385, 970, duration=0.5)
+time.sleep(2)
+pyautogui.mouseDown()
+pyautogui.dragTo(1122, 975, 2, button='left')
+time.sleep(2)
+pyautogui.hotkey("ctrl", "c")
+time.sleep(2)
+
+driver.switch_to.window(window_after)
+driver.find_element('xpath','//*[@id="main"]/div/div[2]/div[2]/nav/div[1]/ul/li[2]/a').click()
+time.sleep(2)
+pyautogui.hotkey("ctrl", "v")
+time.sleep(2)
+pyautogui.click(x=1718, y=415)
+time.sleep(2)
+
+#Loop
+for n in range(num_songs - 1):
+    driver.switch_to.window(window_before)
+    time.sleep(2)
+    pyautogui.click(x=167, y=975)
+    time.sleep(1)
+    pyautogui.click(x=267, y=970)
+    time.sleep(1)
+    pyautogui.moveTo(385, 970, duration=0.5)
+    time.sleep(2)
+    pyautogui.mouseDown()
+    pyautogui.dragTo(1122, 975, 2, button='left')
+    time.sleep(2)
+    pyautogui.hotkey("ctrl", "c")
+    time.sleep(2)
+
+    driver.switch_to.window(window_after)
+    driver.find_element('xpath','//*[@id="main"]/div/div[2]/div[2]/nav/div[1]/ul/li[2]/a').click()
+    time.sleep(2)
+    pyautogui.hotkey("ctrl", "v")
+    time.sleep(2)
+    pyautogui.click(x=1718, y=415)
+    time.sleep(2)
